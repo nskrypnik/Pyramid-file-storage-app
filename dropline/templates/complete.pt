@@ -21,14 +21,8 @@
         
         
     <script type="text/javascript">
-    
-    //alert('File ' + '${file_name}' + ' was succesfully uploaded!');
-    
-    
-    $('#id_list_of_files', window.parent.document).append("<h3>${file_name}</h3>");
-    
-    
-    
+        //alert('File ' + '${file_name}' + ' was succesfully uploaded!');
+        $('#id_list_of_files', window.parent.document).append("<h3>${file_name}</h3>");
     </script>
 
       
