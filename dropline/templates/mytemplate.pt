@@ -16,6 +16,10 @@
 <body>
   <div id="wrap">
     <div id="top">
+    <span tal:condition="logged_in">
+   <a href="${request.application_url}/logout">Logout</a>
+    </span>
+
       <div class="top align-center">
         <div><img src="/static/pyramid.png" width="750" height="169" alt="pyramid"/></div>
       </div>
