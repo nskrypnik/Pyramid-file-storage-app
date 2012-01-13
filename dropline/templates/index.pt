@@ -32,7 +32,7 @@
         ${list_of_files}
     </div>
     
-    <iframe name="upload_frame" width="900px" height="700px" class="hide">
+    <iframe name="upload_frame" width="900px" height="700px">
 
     </iframe>
     

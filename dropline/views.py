@@ -3,6 +3,8 @@ from pyramid.renderers import render_to_response
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 from pyramid.response import Response
+#from gdocs.lib_gdoc import Gdoc
+import lib_gdoc
 
 
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
@@ -22,10 +24,14 @@ def upload_view(request, template_name = 'templates/complete.pt'):
 
     if request.method == 'POST':
         post_body = request.POST
+        file_to_upload = request.POST['file']
         file_name = request.POST['file'].filename
         
+        g_doc = lib_gdoc.Gdoc('emailfordevelop@gmail.com', 'developemail')
+        file_link = g_doc.g_upload(file_to_upload)
         return render_to_response(template_name, {  'post_body': post_body,
                                                     'file_name': file_name,
+                                                    'file_link': file_link,
                                                     }, request=request)
 
     return render_to_response(template_name, {}, request=request)
