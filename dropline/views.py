@@ -10,6 +10,9 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.response import Response
 from pyramid.renderers import render
 
+from dropline.models.users import User
+from dropline.models.meta import session, Session
+
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
 def my_view(request):
     logged_in = authenticated_userid(request)
@@ -31,10 +34,13 @@ def login(request):
         login = request.params['login']
         #password = request.params['password']
         #if USERS.get(login) == password:
-        if login == "Bogdan":
+        #if login == "Bogdan":
+        #import pdb; pdb.set_trace()
+
+        if User.query.filter(User.email == login).first() or User.query.filter(User.twitter == login).first():
             headers = remember(request, login)
-            return HTTPFound(location = came_from,
-                             headers = headers)
+            return HTTPFound(location = came_from, headers = headers)
+                      
         message = 'Failed login'
 
     return dict(
