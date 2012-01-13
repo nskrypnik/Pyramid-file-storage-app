@@ -10,8 +10,8 @@ class FileStorage(object):
         connection = S3Connection(aws_access_key_id, aws_secret_access_key)
         self.bucket = connection.get_bucket(bucket)
 
-    def set_file(self, key_name, contents):
-        if self.bucket.get_key(key_name):
+    def set_file(self, key_name, contents, rewrite=False):
+        if not rewrite and self.bucket.get_key(key_name):
             return False
         key = self.bucket.new_key(key_name)
         key.set_contents_from_string(contents)
