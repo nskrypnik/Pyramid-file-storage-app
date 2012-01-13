@@ -17,6 +17,7 @@ class ViewTests(unittest.TestCase):
 
     def test_filestorage(self):
         import os
+        import urllib2
         from paste.deploy.loadwsgi import appconfig
         from filestorage import FileStorage
         config = appconfig('config:test.ini', 'main', relative_to='.')
@@ -27,12 +28,16 @@ class ViewTests(unittest.TestCase):
         key_name = 'testfile.txt'
         string_length = 2000
         data = os.urandom(string_length)
-        self.assertTrue(fs.set_file(key_name, data, rewrite=True))
+        self.assertTrue(fs.send_file(key_name, data, rewrite=True))
         self.failUnlessEqual(fs.get_file(key_name), data)
         new_data = os.urandom(string_length)
         self.failIfEqual(data, new_data)
-        self.assertTrue(fs.set_file(key_name, new_data, rewrite=True))
+        self.assertTrue(fs.send_file(key_name, new_data, rewrite=True))
         self.failUnlessEqual(fs.get_file(key_name), new_data)
         data = os.urandom(string_length)
         self.failIfEqual(new_data, data)
-        self.assertFalse(fs.set_file(key_name, data))
+        self.assertFalse(fs.send_file(key_name, data))
+        url = fs.generate_url(key_name, 60)
+        self.assertTrue(url)
+        response = urllib2.urlopen(url)
+        self.failUnlessEqual(response.read(), new_data)
