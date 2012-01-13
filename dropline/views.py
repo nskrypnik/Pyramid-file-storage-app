@@ -16,12 +16,15 @@ from dropline.models.meta import session, Session
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
 def my_view(request):
     logged_in = authenticated_userid(request)
+    try:
+        name = User.query.filter(User.email == logged_in).first().name
+    except:
+        name = User.query.filter(User.twitter == logged_in).first().name
 
-    return {'project':'dropline', 'logged_in': logged_in} 
+    return {'project':'dropline', 'logged_in': logged_in, 'name': name} 
    
 @view_config(route_name='login', renderer='templates/login.pt')
 def login(request):
-
     login_url = request.resource_url(request.context, 'login')
     referrer = request.url
     if referrer == login_url:
@@ -29,26 +32,45 @@ def login(request):
     came_from = request.params.get('came_from', referrer)
     message = ''
     login = ''
-    password = ''
+    login_id = ''
+    login_type = ''
+    
     if 'form.submitted' in request.params:
-        login = request.params['login']
-        #password = request.params['password']
-        #if USERS.get(login) == password:
-        #if login == "Bogdan":
-        #import pdb; pdb.set_trace()
+        login_name = request.params['login']
+        login_type = request.params['login_type']
+        login_id = request.params['login_id']
 
-        if User.query.filter(User.email == login).first() or User.query.filter(User.twitter == login).first():
-            headers = remember(request, login)
-            return HTTPFound(location = came_from, headers = headers)
+        if User.query.filter(User.email == login_id).first() or User.query.filter(User.twitter == login_id).first():
+            headers = remember(request, login_id)
+            url = request.route_url('home') 
+            return HTTPFound(location=url, headers = headers)    
+            #return HTTPFound(location = came_from, headers = headers)
                       
-        message = 'Failed login'
+        else:
+            if login_type == "twitter":
+                #import pdb;pdb.set_trace()
+                u = User(name = login_name, twitter = login_id)
+                session.add(u)
+                session.commit()
+                headers = remember(request, login_id)
+                url = request.route_url('home') 
+                return HTTPFound(location=url, headers = headers)               
+            else:
+                u = User(name = login_name, email = login_id)
+                session.add(u)
+                session.commit()
+                headers = remember(request, login_id)
+                url = request.route_url('home') 
+                return HTTPFound(location=url, headers = headers)                
 
     return dict(
         message = message,
         url = request.application_url + '/login',
         came_from = came_from,
         login = login,
-        password = password,
+        login_id = login_id,
+        login_type = login_type,
+        #password = password,
         )
 @view_config(route_name='logout')
 def logout(request):
@@ -59,7 +81,6 @@ def logout(request):
     response.headerlist.extend(headers)
     return response
 
-    #return dict(headers = headers)#HTTPFound(location = request.resource_url(request.context),
 
 from pyramid.renderers import render_to_response
 

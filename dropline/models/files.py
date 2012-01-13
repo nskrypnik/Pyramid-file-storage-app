@@ -10,7 +10,9 @@ class File(Base):
     uuid = Column(String(50))
     title = Column(String(50))
     link = Column(String(50))
+    mime_type = Column(String(50))
     user_id = Column(Integer, ForeignKey('users.id'))
+
 
     user = relationship("User", backref=backref('files', order_by=id))
 

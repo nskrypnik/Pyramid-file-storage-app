@@ -1,16 +1,17 @@
-from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import *
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy import MetaData
 
-engine = create_engine('sqlite:///dev.db', convert_unicode=True, echo=True)
-Base = declarative_base()
-Session = scoped_session(sessionmaker(bind=engine))
-session = Session()
+
+__all__ = ['Base', 'Session']
+
+metadata = MetaData()
+
+Session = scoped_session(sessionmaker())
+Base = declarative_base(metadata=metadata)
 Base.query = Session.query_property()
+session = Session()
 
-
-def init_db():
-    from dropline.models.files import File
-    from dropline.models.users import User
-    Base.metadata.create_all(bind=engine)
-
+def initialize_sql(engine):
+    Session.configure(bind=engine,expire_on_commit=False)
+    Base.metadata.bind = engine
