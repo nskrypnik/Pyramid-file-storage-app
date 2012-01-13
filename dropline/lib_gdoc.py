@@ -4,6 +4,7 @@ import os.path
 import getopt
 import getpass
 import gdata.docs.service
+import gdata.docs.client
 import gdata.spreadsheet.service
 import md5
 
@@ -26,6 +27,8 @@ class Gdoc(object):
           functionality of the Document List feed.
         """
         source = 'Document List Python Sample'
+        self.client = gdata.docs.client.DocsClient(source='noodles-Python_file_storage-v0.1')
+        
         self.gd_client = gdata.docs.service.DocsService()
         self.gd_client.ClientLogin(email, password, source=source)
 
@@ -67,12 +70,15 @@ class Gdoc(object):
 
         try:
 #            import pdb; pdb.set_trace()
-            ms = gdata.MediaSource(file_handle=file.file, content_type=content_type,content_length=9000)
+            ms = gdata.MediaSource(file_handle=file.file, content_type=content_type,content_length=os.fstat(file.file.fileno())[6])
         except IOError:
             print 'Problems reading file. Check permissions.'
             return
 
         entry = self.gd_client.Upload(ms, title)
+#        entry.publish = True
+#        self.client.Update(entry, media_source=ms)
+
         if not entry:
             return False
             

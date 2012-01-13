@@ -22,7 +22,7 @@
         
         <script type="text/javascript">
             //alert('File ' + '${file_name}' + ' was succesfully uploaded!');
-            $('#id_list_of_files', window.parent.document).append('<h3>${file_link}</h3> <form name="upload_form" id="id_upload_form" target="upload_frame" action="/shere" method="POST" enctype="multipart/form-data"> Shere with friend: <input type="text" name="email"> <input type="hidden" name="link" value="${file_link}">  <input type="submit"  value="shere">     </form> ');
+            $('#id_list_of_files', window.parent.document).append('<h3><a href="${file_link}" target="_blank">${file_link}</a></h3> <form name="upload_form" id="id_upload_form" target="upload_frame" action="/shere" method="POST" enctype="multipart/form-data"> Shere with friend: <input type="text" name="email"> <input type="hidden" name="link" value="${file_link}">  <input type="submit"  value="shere">     </form> ');
         </script>
 
          
