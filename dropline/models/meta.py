@@ -15,3 +15,5 @@ session = Session()
 def initialize_sql(engine):
     Session.configure(bind=engine,expire_on_commit=False)
     Base.metadata.bind = engine
+ 
+

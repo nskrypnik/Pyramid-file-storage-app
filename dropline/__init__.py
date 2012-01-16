@@ -22,7 +22,7 @@ def main(global_config, **settings):
                           authentication_policy=authn_policy,
                           authorization_policy=authz_policy)
 
-    #config.add_tween('dropline.tweens.auth_factory')
+    config.add_tween('dropline.tweens.auth_factory')
     config.add_static_view('static', 'static', cache_max_age=3600)
 
     config.add_route('home', '/')

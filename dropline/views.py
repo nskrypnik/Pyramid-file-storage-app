@@ -1,5 +1,5 @@
 from pyramid.view import view_config
-
+import hashlib
 from pyramid.security import authenticated_userid
 from pyramid.security import (
     authenticated_userid,
@@ -25,15 +25,12 @@ def my_view(request):
    
 @view_config(route_name='login', renderer='templates/login.pt')
 def login(request):
-    login_url = request.resource_url(request.context, 'login')
-    referrer = request.url
-    if referrer == login_url:
-        referrer = '/' # never use the login form itself as came_from
-    came_from = request.params.get('came_from', referrer)
+    #login_url = request.resource_url(request.context, 'login')
+    #referrer = request.url
+    #if referrer == login_url:
+    #    referrer = '/' # never use the login form itself as came_from
+    #came_from = request.params.get('came_from', referrer)
     message = ''
-    login = ''
-    login_id = ''
-    login_type = ''
     
     if 'form.submitted' in request.params:
         login_name = request.params['login']
@@ -41,20 +38,28 @@ def login(request):
         login_id = request.params['login_id']
 
         if User.query.filter(User.email == login_id).first() or User.query.filter(User.twitter == login_id).first():
-            headers = remember(request, login_id)
-            url = request.route_url('home') 
-            return HTTPFound(location=url, headers = headers)    
-            #return HTTPFound(location = came_from, headers = headers)
+            consumer_secret = "tvKZebc83uxHllyOImgaAbF0k2nETwPaTWEbecSwlno"
+            userID = request.cookies["twitter_anywhere_identity"].split(':')[0]
+            digestfromtwitter = request.cookies["twitter_anywhere_identity"].split(':')[1]
+            if hashlib.sha1(userID + consumer_secret).hexdigest() == digestfromtwitter:
+                headers = remember(request, login_id)
+                url = request.route_url('home') 
+                return HTTPFound(location=url, headers = headers)    
+            message = "Wrong information"
                       
         else:
             if login_type == "twitter":
-                #import pdb;pdb.set_trace()
-                u = User(name = login_name, twitter = login_id)
-                session.add(u)
-                session.commit()
-                headers = remember(request, login_id)
-                url = request.route_url('home') 
-                return HTTPFound(location=url, headers = headers)               
+                consumer_secret = "tvKZebc83uxHllyOImgaAbF0k2nETwPaTWEbecSwlno"
+                userID = request.cookies["twitter_anywhere_identity"].split(':')[0]
+                digestfromtwitter = request.cookies["twitter_anywhere_identity"].split(':')[1]
+                if hashlib.sha1(userID + consumer_secret).hexdigest() == digestfromtwitter:
+                    u = User(name = login_name, twitter = login_id)
+                    session.add(u)
+                    session.commit()
+                    headers = remember(request, login_id)
+                    url = request.route_url('home') 
+                    return HTTPFound(location=url, headers = headers)
+                message = "Wrong information"               
             else:
                 u = User(name = login_name, email = login_id)
                 session.add(u)
@@ -65,12 +70,6 @@ def login(request):
 
     return dict(
         message = message,
-        url = request.application_url + '/login',
-        came_from = came_from,
-        login = login,
-        login_id = login_id,
-        login_type = login_type,
-        #password = password,
         )
 @view_config(route_name='logout')
 def logout(request):

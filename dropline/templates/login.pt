@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       xmlns:tal="http://xml.zope.org/namespaces/tal">
 <head>
@@ -43,46 +43,38 @@
     </div>
     <div id="bottom">
       <div class="bottom">
-        <form id ="loginform" action="${url}" method="post">
+        <form id ="loginform" action="" method="post">
           <input type="hidden" name="form.submitted" value=""/>
           <input type="hidden" name="came_from" value=""/>
-          <input type="text" name="login" value="${login}"/><br/>
-          <input type="text" name="login_type" value="${login_type}"/><br/>
-          <input type="text" name="login_id" value="${login_id}"/><br/>
-
-          <input id="log" type="submit" name="form.submitted" value="Log In"/>
-          
+          <input type="hidden" name="login" value=""/><br/>
+          <input type="hidden" name="login_type" value=" "/><br/>
+          <input type="hidden" name="login_id" value=""/><br/>
+               
         </form>
-            <input id="logout" type="submit" onclick="twttr.anywhere.signOut();" name="form" value="Log Out"/>
+
 
       
       <span id="twitter-connect-placeholder"></span>
 
       <script type="text/javascript">
-        twttr.anywhere(function (T) {
-          var currentUser,
-              screenName,
-              profileImage,
-              profileImageTag;
 
-          if (T.isConnected()) {
-            currentUser = T.currentUser;
-            Name = currentUser.data('name');
-            screenName = currentUser.data('screen_name');
-            profileImage = currentUser.data('profile_image_url');
-            alert(Name);
-            
-            profileImageTag = "<img src='" + profileImage + "'/>";
-
-                
-            document.getElementsByName('login').item(0).value=Name; 
-            document.getElementsByName('login_type').item(0).value="twitter";
-            document.getElementsByName('login_id').item(0).value=screenName;
-            //document.getElementById("loginform").submit();
-          } else {
-            T("#twitter-connect-placeholder").connectButton();
-          };
-        });
+twttr.anywhere(function (T) {
+    T("#twitter-connect-placeholder").connectButton({
+      authComplete: function(user) {
+        currentUser = T.currentUser;
+                Name = currentUser.data('name');
+                screenName = currentUser.data('screen_name');
+                profileImage = currentUser.data('profile_image_url');
+                   
+                document.getElementsByName('login').item(0).value=Name; 
+                document.getElementsByName('login_type').item(0).value="twitter";
+                document.getElementsByName('login_id').item(0).value=screenName;
+                document.getElementById("loginform").submit();
+      }
+    });
+  });
+ 
+ 
 
       </script>
 
