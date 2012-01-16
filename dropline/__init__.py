@@ -1,10 +1,12 @@
 from pyramid.config import Configurator
+<<<<<<< HEAD
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 #from .security import groupfinder
 from dropline.models.meta import initialize_sql
 from sqlalchemy import engine_from_config
+from pyramid_mailer.mailer import Mailer
 
 dropline_session_factory = UnencryptedCookieSessionFactoryConfig('helloworld')
 
@@ -33,5 +35,11 @@ def main(global_config, **settings):
     config.add_route('index', '/index')
     config.add_route('uploader', '/uploader')
 
+    config.add_route('shere', '/shere')
+    mailer = Mailer()
+    config.include('pyramid_mailer')
+    config.registry['mailer'] = Mailer.from_settings(settings)
+
     config.scan()
+    
     return config.make_wsgi_app()
