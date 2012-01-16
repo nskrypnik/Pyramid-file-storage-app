@@ -1,5 +1,4 @@
 from pyramid.config import Configurator
-<<<<<<< HEAD
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy

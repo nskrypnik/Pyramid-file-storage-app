@@ -8,9 +8,9 @@ def auth_factory(handler, registry):
             return response
             
         elif request.path == "/login":
-
             return response   
-
+        elif request.path == "/logout":
+            return response   
         else:
             url = request.route_url('login') 
             return HTTPFound(location=url)
