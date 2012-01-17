@@ -7,8 +7,35 @@ from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from dropline.models.meta import Base
 from dropline.models.users import User
 from dropline.filestorage import FileStorage
+import urllib 
 
 storage = FileStorage()
+
+GD_VIEWER = 'http://docs.google.com/viewer?url='
+
+SUPPORTED_FILETYPES = {
+  'CSV': 'text/csv',
+  'TSV': 'text/tab-separated-values',
+  'TAB': 'text/tab-separated-values',
+  'DOC': 'application/msword',
+  'DOCX': ('application/vnd.openxmlformats-officedocument.'
+           'wordprocessingml.document'),
+  'ODS': 'application/x-vnd.oasis.opendocument.spreadsheet',
+  'ODT': 'application/vnd.oasis.opendocument.text',
+  'RTF': 'application/rtf',
+  'SXW': 'application/vnd.sun.xml.writer',
+  'TXT': 'text/plain',
+  'XLS': 'application/vnd.ms-excel',
+  'XLSX': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'PDF': 'application/pdf',
+  'PNG': 'image/png',
+  'PPT': 'application/vnd.ms-powerpoint',
+  'PPS': 'application/vnd.ms-powerpoint',
+  'HTM': 'text/html',
+  'HTML': 'text/html',
+  'ZIP': 'application/zip',
+  'SWF': 'application/x-shockwave-flash'
+  }
 
 class File(Base):
     __tablename__ = 'files'
@@ -52,4 +79,14 @@ class File(Base):
         if not self.uuid:
             return None
         return storage.generate_url(self.uuid, expires_in)
-
+        
+    
+    @hybrid_method
+    def get_gd_url(self, expires_in=None):
+        if self.mime_type in SUPPORTED_FILETYPES.values():
+            file_url = quote_plus(self.get_url())
+            gd_url = GD_VIEWER + file_url
+            return gd_url
+        return None
+    
+    
