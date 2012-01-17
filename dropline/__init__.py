@@ -22,13 +22,20 @@ def main(global_config, **settings):
     class DroplineRequest(Request):
         _server_port = settings.get('server.port') 
         _server_url = settings.get('server.url')
-        
+        _twitter_key = settings.get('consumer_secret')
+        import pdb; pdb.set_trace()
         @property
         def server_url(self):
             if self._server_port:
                 return "%s:%s" % (self._server_url, self._server_port)
             return self._server_url
-        
+
+        @property
+        def twitter_key(self):
+            if self._twitter_key:
+                return self._twitter_key
+            return self._twitter_key
+                    
     engine = engine_from_config(settings, 'sqlalchemy.')
     initialize_sql(engine)
 
