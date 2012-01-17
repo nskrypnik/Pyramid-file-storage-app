@@ -1,14 +1,14 @@
 from boto.s3.connection import S3Connection
 
 DEFAULT_BUCKET = 'dropline_test'
+DEFAULT_EXPIRES_IN = 86400
 
 
 class FileStorage(object):
 
-    def __init__(self, aws_access_key_id, aws_secret_access_key,
-                 bucket=DEFAULT_BUCKET):
-        connection = S3Connection(aws_access_key_id, aws_secret_access_key)
-        self.bucket = connection.get_bucket(bucket)
+    def __init__(self):
+        connection = S3Connection(self.aws_access_key_id, self.aws_secret_access_key)
+        self.bucket = connection.get_bucket(self.bucket_name)
 
     def send_file(self, key_name, contents, content_type=None, rewrite=False):
         if not rewrite and self.bucket.get_key(key_name):
@@ -28,7 +28,9 @@ class FileStorage(object):
         else:
             return None
 
-    def generate_url(self, key_name, expires_in):
+    def generate_url(self, key_name, expires_in=None):
+        if expires_in is None:
+            expires_in = DEFAULT_EXPIRES_IN
         return self.bucket.connection.generate_url(expires_in,
                                                    method='GET',
                                                    bucket=self.bucket.name,
@@ -37,3 +39,8 @@ class FileStorage(object):
                                                    query_auth=True,
                                                    force_http=False,
                                                    response_headers=None)
+
+def initialize_files_torage(aws_access_key_id, aws_secret_access_key, bucket):
+    FileStorage.aws_access_key_id = aws_access_key_id
+    FileStorage.aws_secret_access_key = aws_secret_access_key
+    FileStorage.bucket_name = bucket
