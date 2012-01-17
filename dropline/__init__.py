@@ -15,8 +15,8 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     initialize_sql(engine)
     
-    authn_policy = AuthTktAuthenticationPolicy(secret='sosecret')
-                                               #callback=groupfinder)
+    authn_policy = AuthTktAuthenticationPolicy(secret='')
+                       
     authz_policy = ACLAuthorizationPolicy()
 
     config = Configurator(settings=settings, session_factory = dropline_session_factory,

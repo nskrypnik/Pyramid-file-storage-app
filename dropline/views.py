@@ -42,9 +42,9 @@ def login(request):
         login_name = request.params['login']
         login_type = request.params['login_type']
         login_id = request.params['login_id']
-
+        consumer_secret = "tvKZebc83uxHllyOImgaAbF0k2nETwPaTWEbecSwlno"
+        
         if User.query.filter(User.email == login_id).first() or User.query.filter(User.twitter == login_id).first():
-            consumer_secret = "tvKZebc83uxHllyOImgaAbF0k2nETwPaTWEbecSwlno"
             userID = request.cookies["twitter_anywhere_identity"].split(':')[0]
             digestfromtwitter = request.cookies["twitter_anywhere_identity"].split(':')[1]
             if hashlib.sha1(userID + consumer_secret).hexdigest() == digestfromtwitter:
@@ -55,7 +55,6 @@ def login(request):
                       
         else:
             if login_type == "twitter":
-                consumer_secret = "tvKZebc83uxHllyOImgaAbF0k2nETwPaTWEbecSwlno"
                 userID = request.cookies["twitter_anywhere_identity"].split(':')[0]
                 digestfromtwitter = request.cookies["twitter_anywhere_identity"].split(':')[1]
                 if hashlib.sha1(userID + consumer_secret).hexdigest() == digestfromtwitter:
@@ -82,7 +81,6 @@ def logout(request):
     headers = forget(request)
     result = render('templates/logout.pt', {}, request=request)
     response = Response(result)
-
     response.headerlist.extend(headers)
     return response
 
