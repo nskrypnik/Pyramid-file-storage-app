@@ -6,11 +6,11 @@ def auth_factory(handler, registry):
         response = handler(request)       
         if authenticated_userid(request):
             return response
-            
-        elif request.path == "/login":
-            return response   
-        elif request.path == "/logout":
-            return response   
+        
+        exclude_paths = ["/login", "/logout", "/openid_send"]    
+
+        if request.path in exclude_paths:
+            return response
         else:
             url = request.route_url('login') 
             return HTTPFound(location=url)
