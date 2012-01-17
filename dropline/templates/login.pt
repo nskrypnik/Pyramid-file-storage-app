@@ -41,18 +41,23 @@
         <div id="right" class="app-welcome align-right"></div>
       </div>
     </div>
+
     <div id="bottom">
       <div class="bottom">
         <form id ="loginform" action="" method="post">
           <input type="hidden" name="form.submitted" value=""/>
           <input type="hidden" name="came_from" value=""/>
           <input type="hidden" name="login" value=""/><br/>
-          <input type="hidden" name="login_type" value=" "/><br/>
+          <input type="hidden" name="login_type" value=""/><br/>
           <input type="hidden" name="login_id" value=""/><br/>
                
         </form>
 
-
+    <div id="google_button">
+        <form method="get" accept-charset="UTF-8" action="/openid_send">
+            <input type="submit" value="Login with google!"/>
+        </form>
+    </div>
       
       <span id="twitter-connect-placeholder"></span>
 
