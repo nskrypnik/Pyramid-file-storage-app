@@ -114,9 +114,10 @@ from pyramid.renderers import render_to_response
 
 @view_config(route_name='index')
 def index_view(request, template_name = 'templates/index.pt'):
-
-    list_of_files = User.query.filter(User.email == login_id)
-
+    try:
+        list_of_files = User.query.filter(User.email == login_id)
+    except:
+        list_of_files = User.query.filter(User.twitter == login_id)    
     return render_to_response(template_name, { 'list_of_files': list_of_files}, request=request)
 
 

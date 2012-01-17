@@ -23,7 +23,7 @@ def main(global_config, **settings):
         _server_port = settings.get('server.port') 
         _server_url = settings.get('server.url')
         _twitter_key = settings.get('consumer_secret')
-        import pdb; pdb.set_trace()
+
         @property
         def server_url(self):
             if self._server_port:
