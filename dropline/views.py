@@ -22,6 +22,8 @@ from openid.consumer.consumer import Consumer, DiscoveryFailure, SUCCESS, FAILUR
 from openid.extensions import sreg, ax
 import tempfile
 import cgi
+from dropline.models.files import File
+
 
 SERVER_OPENID = 'https://www.google.com/accounts/o8/id'
 ROOT = 'http://localhost:6543/'
@@ -112,23 +114,23 @@ from pyramid.renderers import render_to_response
 
 @view_config(route_name='index')
 def index_view(request, template_name = 'templates/index.pt'):
-    list_of_files = None
 
-    return render_to_response(template_name, {'project':'dropline', 'list_of_files': list_of_files}, request=request)
+    list_of_files = User.query.filter(User.email == login_id)
+
+    return render_to_response(template_name, { 'list_of_files': list_of_files}, request=request)
 
 
 @view_config(route_name='uploader')
 def upload_view(request, template_name = 'templates/complete.pt'):
-
     if request.method == 'POST':
         post_body = request.POST
         file_to_upload = request.POST['file']
-        file_name = request.POST['file'].filename
+        am_file = File(file_to_upload.filename,file_to_upload.type )
         
-        g_doc = lib_gdoc.Gdoc('emailfordevelop@gmail.com', 'developemail')
-        file_link = g_doc.g_upload(file_to_upload)
-        return render_to_response(template_name, {  'post_body': post_body,
-                                                    'file_name': file_name,
+        session.add()
+        session.commit()
+        
+        return render_to_response(template_name, {  'file_name': am_file.title,
                                                     'file_link': file_link,
                                                     }, request=request)
 
