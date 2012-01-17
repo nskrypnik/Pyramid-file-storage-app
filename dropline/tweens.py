@@ -9,7 +9,7 @@ def auth_factory(handler, registry):
         
         exclude_paths = ["/login", "/logout", "/openid_send"]    
 
-        if request.path in exclude_paths:
+        if request.path in exclude_paths or request.path.find('/static') != -1:
             return response
         else:
             url = request.route_url('login') 
