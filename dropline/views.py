@@ -30,11 +30,6 @@ STORAGE = FileOpenIDStore(tempfile.gettempdir())
    
 @view_config(route_name='login', renderer='templates/login.pt')
 def login(request):
-    #login_url = request.resource_url(request.context, 'login')
-    #referrer = request.url
-    #if referrer == login_url:
-    #    referrer = '/' # never use the login form itself as came_from
-    #came_from = request.params.get('came_from', referrer)
     message = ''
     if 'openid.ns' in request.GET:
         consumer = Consumer(request.session, STORAGE)
