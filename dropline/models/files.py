@@ -7,11 +7,11 @@ from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from dropline.models.meta import Base, Session
 from dropline.models.users import User
 from dropline.filestorage import FileStorage
-import urllib 
+import urllib
 
 storage = FileStorage()
 
-GD_VIEWER = 'http://docs.google.com/viewer?url='
+GD_VIEWER = 'http://docs.google.com/viewer?'
 
 SUPPORTED_FILETYPES = {
   'CSV': 'text/csv',
@@ -83,9 +83,9 @@ class File(Base):
     @hybrid_method
     def get_gd_url(self, expires_in=None):
         if self.mime_type in SUPPORTED_FILETYPES.values():
-            file_url = quote_plus(self.get_url())
-            gd_url = GD_VIEWER + file_url
+            file_url = self.get_url()
+            gd_url = "".join([GD_VIEWER, urllib.urlencode({'url': file_url})])
             return gd_url
-        return None
+        return self.get_url()
     
     

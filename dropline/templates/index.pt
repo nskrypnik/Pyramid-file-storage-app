@@ -27,7 +27,7 @@
 <div id = "new_file"> </div>
     <div tal:repeat="item list_of_files" id="id_list_of_files" name="list_of_files">
 
-        <span tal:replace="item.title" /> <a href="${item.get_url()}">Open</a><h3> <form name="upload_form" id="id_upload_form" target="upload_frame" action="/shere" method="POST" enctype="multipart/form-data"> Share with friend: <input type="text" name="email"> <input type="hidden" name="link" value="${item.get_url()}">  <input type="submit"  value="share">     </form> 
+        <span tal:replace="item.title" /> <a href="${item.get_gd_url()}">Open</a><h3> <form name="upload_form" id="id_upload_form" target="upload_frame" action="/shere" method="POST" enctype="multipart/form-data"> Share with friend: <input type="text" name="email"> <input type="hidden" name="link" value="${item.get_url()}">  <input type="submit"  value="share">     </form> 
         <hr>
         
 

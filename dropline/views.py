@@ -136,7 +136,7 @@ def upload_view(request, template_name = 'templates/complete.pt'):
                        user_id=user.id)
         
         am_file.save(file_to_upload.file.read())
-        am_file.link = am_file.get_url()
+        am_file.link = am_file.get_gd_url()
         return render_to_response(template_name, {  'file_name': am_file.title,
                                                     'file_link': am_file.link,
                                                     }, request=request)
