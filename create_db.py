@@ -8,9 +8,10 @@ from ConfigParser import ConfigParser
 import sys
 
 def init_db():
-
+    if len(sys.argv) == 1:
+        raise Exception('You should specifi config file')
     config = ConfigParser()
-    config.readfp(open("development.ini"))
+    config.readfp(open(sys.argv[1]))
     for key, value in config.items('app:main'):
         if key =='sqlalchemy.url':
             dic = {'sqlalchemy.url': value}
