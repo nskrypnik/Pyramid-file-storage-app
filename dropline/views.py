@@ -67,7 +67,7 @@ def login(request):
         else: message = 'Verification failed.'
         return dict(
             message = message,
-	)
+            )
 
     elif 'form.submitted' in request.params:
         login_name = request.params['login']
@@ -115,29 +115,40 @@ def logout(request):
     return response
 
 
-from pyramid.renderers import render_to_response
-
 
 @view_config(route_name='index')
 def index_view(request, template_name = 'templates/index.pt'):
+    logged_in = authenticated_userid(request)
+    
+    user = User.query.filter(User.email == logged_in).first()
+    if user is None:
+        user = User.query.filter(User.twitter == logged_in).first()
+    if user is None:
+        list_of_files = []
+    else:
+        list_of_files = File.query.filter(File.user_id == user.id)
 
-    list_of_files = User.query.filter(User.email == login_id)
-
-    return render_to_response(template_name, { 'list_of_files': list_of_files}, request=request)
+    return render_to_response(template_name, { 'list_of_files': list_of_files,
+                                               'project': 'dropline'}, request=request)
 
 
 @view_config(route_name='uploader')
 def upload_view(request, template_name = 'templates/complete.pt'):
     if request.method == 'POST':
-        post_body = request.POST
+        logged_in = authenticated_userid(request)
+        user = User.query.filter(User.email == logged_in).first()
+        if user is None:
+            user = User.query.filter(User.twitter == logged_in).first()
         file_to_upload = request.POST['file']
-        am_file = File(file_to_upload.filename,file_to_upload.type )
+        am_file = File(title=file_to_upload.filename,
+                       mime_type=file_to_upload.type,
+                       user_id=user.id)
         
-        session.add()
+        session.add(am_file)
         session.commit()
         
         return render_to_response(template_name, {  'file_name': am_file.title,
-                                                    'file_link': file_link,
+                                                    'file_link': am_file.link,
                                                     }, request=request)
 
     return render_to_response(template_name, {}, request=request)

@@ -11,6 +11,7 @@ requires = [
     'pyramid_debugtoolbar',
     'waitress',
     'boto',
+    'python-openid'
     ]
 
 setup(name='dropline',

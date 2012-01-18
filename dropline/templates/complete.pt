@@ -14,10 +14,7 @@
     <body>
         
         <h1>Upload complete, run something script</h1>
-        Post body: <br>
-           
-        ${post_body} 
-           
+        
         
         
         <script type="text/javascript">
