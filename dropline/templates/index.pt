@@ -15,10 +15,6 @@
     href="http://docs.pylonsproject.org/projects/pyramid/dev/"
     >pyramid</a> web application framework.</h1>
     
-    Hello!
-    
-    
-    
     
     <form name="upload_form" id="id_upload_form" target="upload_frame" action="/uploader" method="POST" enctype="multipart/form-data">
 
