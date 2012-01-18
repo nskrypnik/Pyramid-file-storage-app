@@ -50,7 +50,6 @@ def login(request):
 
             if not User.query.filter(User.email == login_id).first():
                 u = User(name = login_name, email = login_id)
-                print u
                 session.add(u)
                 session.commit()
             
