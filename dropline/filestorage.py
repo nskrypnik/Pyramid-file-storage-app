@@ -7,7 +7,7 @@ DEFAULT_EXPIRES_IN = 86400
 class FileStorage(object):
 
     def __new__(cls):
-        if hasattr(cls, 'aws_access_key'):
+        if hasattr(cls, 'aws_access_key_id'):
             return object.__new__(cls)
         else:
             return None
@@ -46,7 +46,7 @@ class FileStorage(object):
                                                    force_http=False,
                                                    response_headers=None)
 
-def initialize_files_torage(aws_access_key_id, aws_secret_access_key, bucket):
+def initialize_file_storage(aws_access_key_id, aws_secret_access_key, bucket):
     FileStorage.aws_access_key_id = aws_access_key_id
     FileStorage.aws_secret_access_key = aws_secret_access_key
     FileStorage.bucket_name = bucket

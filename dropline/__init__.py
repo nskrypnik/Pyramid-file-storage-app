@@ -10,7 +10,7 @@ from pyramid.request import Request
 from pyramid.decorator import reify
 from pyramid.request import Request
 
-from dropline.filestorage import initialize_files_torage
+from dropline.filestorage import initialize_file_storage
 
 
 dropline_session_factory = UnencryptedCookieSessionFactoryConfig('helloworld')
@@ -39,7 +39,7 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     initialize_sql(engine)
 
-    initialize_files_torage(settings.get('aws.access_key_id'),
+    initialize_file_storage(settings.get('aws.access_key_id'),
                             settings.get('aws.secret_access_key'),
                             settings.get('s3.bucket'))
     
