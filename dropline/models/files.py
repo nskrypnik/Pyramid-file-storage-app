@@ -55,11 +55,6 @@ class File(Base):
             setattr(self, k, v)
         if not 'uuid' in kwargs:
             self.uuid = str(uuid.uuid4())
-   # def __init__(self, title, link, user_id):
-   #     self.title = title
-   #     self.link = link
-   #     self.user_id = user_id
-
 
     def __repr__(self):
         return "<File('%s,%s')>" % (self.title, self.user_id)

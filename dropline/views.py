@@ -73,7 +73,7 @@ def login(request):
         login_name = request.params['login']
         login_type = request.params['login_type']
         login_id = request.params['login_id']
-        consumer_secret = "tvKZebc83uxHllyOImgaAbF0k2nETwPaTWEbecSwlno"
+        consumer_secret = request.twitter_key
         
         if User.query.filter(User.email == login_id).first() or User.query.filter(User.twitter == login_id).first():
             userID = request.cookies["twitter_anywhere_identity"].split(':')[0]
@@ -96,13 +96,7 @@ def login(request):
                     url = request.route_url('index') 
                     return HTTPFound(location=url, headers = headers)
                 message = "Wrong information"               
-            else:
-                u = User(name = login_name, email = login_id)
-                session.add(u)
-                session.commit()
-                headers = remember(request, login_id)
-                url = request.route_url('index') 
-                return HTTPFound(location=url, headers = headers)                
+        
     return dict(
         message = message,
         )
@@ -130,6 +124,7 @@ def index_view(request, template_name = 'templates/index.pt'):
 
     return render_to_response(template_name, { 'list_of_files': list_of_files,
                                                'project': 'dropline'}, request=request)
+
 
 
 @view_config(route_name='uploader')
