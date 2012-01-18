@@ -6,6 +6,12 @@ DEFAULT_EXPIRES_IN = 86400
 
 class FileStorage(object):
 
+    def __new__(cls):
+        if hasattr(cls, 'aws_access_key'):
+            return object.__new__(cls)
+        else:
+            return None
+
     def __init__(self):
         connection = S3Connection(self.aws_access_key_id, self.aws_secret_access_key)
         self.bucket = connection.get_bucket(self.bucket_name)
