@@ -10,7 +10,6 @@ metadata = MetaData()
 Session = scoped_session(sessionmaker())
 Base = declarative_base(metadata=metadata)
 Base.query = Session.query_property()
-session = Session()
 
 def initialize_sql(engine):
     Session.configure(bind=engine,expire_on_commit=False)

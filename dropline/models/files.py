@@ -4,7 +4,7 @@ import uuid
 from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
-from dropline.models.meta import Base
+from dropline.models.meta import Base, Session
 from dropline.models.users import User
 from dropline.filestorage import FileStorage
 import urllib 
@@ -55,6 +55,7 @@ class File(Base):
             setattr(self, k, v)
         if not 'uuid' in kwargs:
             self.uuid = str(uuid.uuid4())
+        self.session = Session()
 
     def __repr__(self):
         return "<File('%s,%s')>" % (self.title, self.user_id)
@@ -67,6 +68,9 @@ class File(Base):
             content_type = self.mime_type
         else:
             content_type = None
+            
+        self.session.add(self)
+        self.session.commit()
         return storage.send_file(self.uuid, data, content_type)
         
     @hybrid_method

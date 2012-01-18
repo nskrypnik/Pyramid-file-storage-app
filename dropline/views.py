@@ -10,7 +10,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.response import Response
 from pyramid.renderers import render
 from dropline.models.users import User
-from dropline.models.meta import session, Session
+from dropline.models.meta import Session
 from pyramid.renderers import render_to_response
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
@@ -50,8 +50,7 @@ def login(request):
 
             if not User.query.filter(User.email == login_id).first():
                 u = User(name = login_name, email = login_id)
-                session.add(u)
-                session.commit()
+                u.save()
             
             headers = remember(request, login_id)
             url = request.route_url('index')
@@ -89,8 +88,7 @@ def login(request):
                 digestfromtwitter = request.cookies["twitter_anywhere_identity"].split(':')[1]
                 if hashlib.sha1(userID + consumer_secret).hexdigest() == digestfromtwitter:
                     u = User(name = login_name, twitter = login_id)
-                    session.add(u)
-                    session.commit()
+                    u.save()
                     headers = remember(request, login_id)
                     url = request.route_url('index') 
                     return HTTPFound(location=url, headers = headers)
@@ -136,9 +134,6 @@ def upload_view(request, template_name = 'templates/complete.pt'):
         am_file = File(title=file_to_upload.filename,
                        mime_type=file_to_upload.type,
                        user_id=user.id)
-        
-        session.add(am_file)
-        session.commit()
         
         am_file.save(file_to_upload.file.read())
         am_file.link = am_file.get_url()

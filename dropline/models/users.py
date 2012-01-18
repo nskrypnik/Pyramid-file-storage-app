@@ -1,5 +1,5 @@
 from sqlalchemy import *
-from dropline.models.meta import Base
+from dropline.models.meta import Base, Session
 from sqlalchemy.orm import *
 
 class User(Base):
@@ -13,8 +13,11 @@ class User(Base):
     def __init__(self, **kwargs):
         for k, v in kwargs.iteritems():
             setattr(self, k, v)
-
-
+        self.session = Session()
+    
+    def save(self):
+        self.session.add(self)
+        self.session.commit()
 
     def __repr__(self):
         return "<User('%s')>" % self.name
