@@ -15,7 +15,7 @@
         
         <script type="text/javascript">
             //alert('File ' + '${file_name}' + ' was succesfully uploaded!');
-            $('#new_file', window.parent.document).append('<h3 style="background-color:#7FFF00;"> New file uploaded  <a href="${file_link}" target="_blank">${file_name}</a> <form name="upload_form" id="id_upload_form" target="upload_frame" action="/shere" method="POST" enctype="multipart/form-data"> Shere with friend: <input type="text" name="email"> <input type="hidden" name="link" value="${file_link}">  <input type="submit"  value="share">     </form> </h3>');
+            $('#new_file', window.parent.document).append('<h3 style="background-color:#7FFF00;"> New file uploaded  <a href="${file_link}" target="_blank">${file_name}</a> <form name="upload_form" id="id_upload_form" target="upload_frame" action="/shere" method="POST" enctype="multipart/form-data"> Share with friend: <input type="text" name="email"> <input type="hidden" name="link" value="${file_link}">  <input type="submit"  value="share">     </form> </h3><hr>');
         </script>
 
          
