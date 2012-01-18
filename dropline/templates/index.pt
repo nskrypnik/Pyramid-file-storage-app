@@ -29,8 +29,11 @@
 
     <h2>List of files:</h2>
 
-    <div id="id_list_of_files" name="list_of_files">
-        ${list_of_files}
+    <div tal:repeat="item list_of_files" id="id_list_of_files" name="list_of_files">
+
+        <span tal:replace="item.title" /> <a href="${item.get_url()}">Open</a> Share with friend
+
+
     </div>
     
     <iframe name="upload_frame" width="900px" height="700px" class="hide">

@@ -110,8 +110,8 @@ def logout(request):
 
 
 
-@view_config(route_name='index')
-def index_view(request, template_name = 'templates/index.pt'):
+@view_config(route_name='index', renderer='templates/index.pt')
+def index_view(request):
     logged_in = authenticated_userid(request)
     
     user = User.query.filter(User.email == logged_in).first()
@@ -120,10 +120,9 @@ def index_view(request, template_name = 'templates/index.pt'):
     if user is None:
         list_of_files = []
     else:
-        list_of_files = File.query.filter(File.user_id == user.id)
+        list_of_files = File.query.filter(File.user_id == user.id).all()
 
-    return render_to_response(template_name, { 'list_of_files': list_of_files,
-                                               'project': 'dropline'}, request=request)
+    return { 'list_of_files': list_of_files, 'project': 'dropline'}
 
 
 
@@ -156,7 +155,7 @@ def shere_view(request):
         post_body = request.POST
         recipient_email = request.POST['email']
         link = request.POST['link']
-        email_body = "Hello! You friend shere file with you:\n link to downloud: %s"  % link
+        email_body = "Hello! You friend shere file with you:\n link to download: %s"  % link
         
         mailer = get_mailer(request)
         message = Message(subject="hello world",
